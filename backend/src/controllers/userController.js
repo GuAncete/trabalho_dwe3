@@ -3,17 +3,14 @@ const bcrypt = require('bcryptjs');
 
 class UserController {
   
-  /**
-   * GET /api/v1/profile
-   * Busca os dados do usuário logado (usando o ID do token JWT).
-   */
+
   async getProfile(req, res) {
-    const userId = req.userId; // Vem do authMiddleware
+    const userId = req.userId;
 
     try {
       const user = await db('usuarios')
         .where({ id: userId, removido: false })
-        .select('id', 'nome', 'email') // NUNCA retorne a senha_hash
+        .select('id', 'nome', 'email') 
         .first();
       
       if (!user) {
@@ -27,13 +24,10 @@ class UserController {
     }
   }
 
-  /**
-   * PUT /api/v1/profile
-   * Atualiza os dados do usuário logado (nome, email e/ou senha).
-   */
+  
   async updateProfile(req, res) {
-    const userId = req.userId; // Vem do authMiddleware
-    const { nome, email, senha } = req.body; // 'senha' é opcional
+    const userId = req.userId; 
+    const { nome, email, senha } = req.body; 
 
     try {
       // 1. Prepara o objeto de atualização
@@ -47,7 +41,7 @@ class UserController {
         // 2. Verifica se o novo e-mail já está em uso por OUTRO usuário
         const emailExists = await db('usuarios')
           .where({ email: email })
-          .whereNot({ id: userId }) // Ignora o próprio usuário
+          .whereNot({ id: userId }) 
           .first();
 
         if (emailExists) {
@@ -58,7 +52,7 @@ class UserController {
 
       // 3. Se uma nova senha foi fornecida, hasheia ela
       if (senha) {
-        if (senha.length < 3) { // Você pode aumentar isso (ex: 6)
+        if (senha.length < 3) { 
            return res.status(400).json({ error: 'A nova senha é muito curta.' });
         }
         dataToUpdate.senha_hash = await bcrypt.hash(senha, 10);
@@ -73,7 +67,7 @@ class UserController {
       const [updatedUser] = await db('usuarios')
         .where({ id: userId })
         .update(dataToUpdate)
-        .returning(['id', 'nome', 'email']); // Retorna os dados atualizados
+        .returning(['id', 'nome', 'email']); 
       
       return res.json(updatedUser);
 

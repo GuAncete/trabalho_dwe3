@@ -11,7 +11,6 @@ class FaturaController {
     }
 
     try {
-      // Verifica se o cliente existe e não está removido
       const cliente = await db('clientes')
         .where({ id: cliente_id, removido: false })
         .first();
@@ -50,7 +49,6 @@ class FaturaController {
         return res.status(404).json({ error: 'Cliente não encontrado.' });
       }
       
-      // Busca faturas não removidas deste cliente
       const faturas = await db('faturas')
         .where({ cliente_id: cliente_id, removido: false })
         .select('*');
@@ -83,7 +81,6 @@ class FaturaController {
   // 4. UPDATE (Atualizar Fatura)
   async update(req, res) {
     const { id } = req.params;
-    // Permitimos atualizar apenas os dados da fatura, não o cliente_id
     const { descricao, valor, data_vencimento } = req.body; 
 
     try {
@@ -132,7 +129,7 @@ class FaturaController {
       return res.status(500).json({ error: 'Erro interno ao deletar fatura.' });
     }
   }
-  // ... dentro da classe FaturaController ...
+
 
   // 6. PAY (Marcar Fatura como Paga)
   async pagar(req, res) {
@@ -147,16 +144,14 @@ class FaturaController {
         return res.status(404).json({ error: 'Fatura não encontrada.' });
       }
 
-      // Verifica se a fatura já não está paga
       if (fatura.data_pagamento) {
         return res.status(400).json({ error: 'Esta fatura já foi paga.' });
       }
 
-      // Atualiza a fatura definindo a data de pagamento para HOJE
       const [faturaPaga] = await db('faturas')
         .where({ id: id })
         .update({
-          data_pagamento: new Date(), // Define a data de pagamento
+          data_pagamento: new Date(),
         })
         .returning('*');
       
@@ -167,6 +162,6 @@ class FaturaController {
       return res.status(500).json({ error: 'Erro interno ao processar pagamento.' });
     }
   }
-} // Fim da classe
+} 
 
 module.exports = new FaturaController();

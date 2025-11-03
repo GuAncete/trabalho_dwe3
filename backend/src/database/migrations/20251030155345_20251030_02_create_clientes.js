@@ -2,15 +2,14 @@
 
 exports.up = function (knex) {
   return knex.schema.createTable('clientes', (table) => {
-    table.increments('id').primary(); // Campo ID
-    table.string('nome').notNullable(); // Campo texto
-    table.string('documento').unique(); // Ex: CPF/CNPJ
-    table.boolean('removido').defaultTo(false); // Campo Removido
+    table.increments('id').primary(); 
+    table.string('nome').notNullable(); 
+    table.string('documento').unique(); 
+    table.boolean('removido').defaultTo(false); 
     table.timestamps(true, true);
   });
 };
 
 exports.down = function (knex) {
-  // O 'down' deve ser o oposto do 'up'
   return knex.schema.dropTable('clientes');
 };

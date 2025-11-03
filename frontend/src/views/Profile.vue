@@ -34,21 +34,19 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import apiClient from '@/api/axiosConfig';
-import { useAuthStore } from '@/stores/auth'; // Importa a store
+import { useAuthStore } from '@/stores/auth'; 
 
-const authStore = useAuthStore(); // Instancia a store
+const authStore = useAuthStore(); 
 const isLoading = ref(false);
 
 const form = ref({
   nome: '',
   email: '',
-  senha: '' // Este campo é opcional
+  senha: '' 
 });
 
-// 1. Busca os dados atuais do usuário quando a página carrega
 async function fetchProfile() {
-  // Poderíamos usar authStore.user, mas buscar da API garante
-  // que os dados estão 100% atualizados.
+  
   try {
     const response = await apiClient.get('/profile');
     form.value.nome = response.data.nome;
@@ -59,17 +57,14 @@ async function fetchProfile() {
   }
 }
 
-// 2. Envia as atualizações para a API
 async function handleUpdateProfile() {
   isLoading.value = true;
   
-  // Prepara o payload
   const payload = {
     nome: form.value.nome,
     email: form.value.email
   };
 
-  // Só envia a senha se o campo foi preenchido
   if (form.value.senha) {
     payload.senha = form.value.senha;
   }
@@ -77,12 +72,11 @@ async function handleUpdateProfile() {
   try {
     const response = await apiClient.put('/profile', payload);
 
-    // 3. ATUALIZA A STORE (e o localStorage) com os novos dados
-    //    Isso é crucial para que o "Olá, Nome" no topo mude!
+    
     authStore.updateUser(response.data);
 
     alert('Perfil atualizado com sucesso!');
-    form.value.senha = ''; // Limpa o campo de senha
+    form.value.senha = ''; 
 
   } catch (error) {
     console.error('Erro ao atualizar perfil:', error.response?.data);
@@ -92,12 +86,10 @@ async function handleUpdateProfile() {
   }
 }
 
-// Busca os dados ao montar o componente
 onMounted(fetchProfile);
 </script>
 
 <style scoped>
-/* Estilos específicos para esta página, se necessário */
 .form-group small {
   display: block;
   margin-top: 5px;

@@ -9,16 +9,13 @@ const apiClient = axios.create({
   },
 });
 
-// Interceptor de Requisição (Request Interceptor)
-// Isso é executado ANTES de CADA requisição
+
 apiClient.interceptors.request.use(
   (config) => {
-    // Instancia a store DENTRO do interceptor
     const authStore = useAuthStore();
     const token = authStore.token;
 
     if (token) {
-      // Adiciona o cabeçalho de autorização
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -28,23 +25,18 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Interceptor de Resposta (Response Interceptor)
-// Isso é executado DEPOIS de CADA resposta
+
 apiClient.interceptors.response.use(
   (response) => {
-    // Qualquer status code 2xx cai aqui
     return response;
   },
   (error) => {
-    // Se o erro for 401 (Não Autorizado) ou 403 (Proibido)
-    // significa que o token é inválido ou expirou.
     if (error.response && [401, 403].includes(error.response.status)) {
       const authStore = useAuthStore();
       console.warn('Token inválido ou expirado. Fazendo logout.');
-      authStore.logout(); // Desloga o usuário
+      authStore.logout(); 
     }
     
-    // Qualquer status code fora de 2xx cai aqui
     return Promise.reject(error);
   }
 );

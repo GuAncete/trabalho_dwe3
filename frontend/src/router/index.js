@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '@/stores/auth'; // Importa a store
+import { useAuthStore } from '@/stores/auth'; 
 
-// Importação das Views
 import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
 import Dashboard from '@/views/Dashboard.vue';
@@ -14,40 +13,40 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
-    meta: { requiresAuth: false }, // Não requer autenticação
+    meta: { requiresAuth: false }, 
   },
   {
     path: '/register',
     name: 'Register',
     component: Register,
-    meta: { requiresAuth: false }, // Não requer autenticação
+    meta: { requiresAuth: false }, 
   },
   {
     path: '/',
     name: 'Dashboard',
     component: Dashboard,
-    meta: { requiresAuth: true }, // Requer autenticação
+    meta: { requiresAuth: true }, 
   },
   {
     path: '/clientes',
     name: 'Clientes',
     component: ClientesList,
-    meta: { requiresAuth: true }, // Requer autenticação
+    meta: { requiresAuth: true }, 
   },
   {
-    path: '/clientes/:id', // Rota dinâmica para detalhes do cliente
+    path: '/clientes/:id', 
     name: 'ClienteDetalhes',
     component: ClienteDetalhes,
-    props: true, // Passa o :id como prop para o componente
-    meta: { requiresAuth: true }, // Requer autenticação
+    props: true, 
+    meta: { requiresAuth: true }, 
   },
   {
-    path: '/profile', // <-- ADICIONE ESTE BLOCO
+    path: '/profile', 
     name: 'Profile',
     component: Profile,
     meta: { requiresAuth: true },
   },
-  // Redireciona para o login se a rota não for encontrada
+  
   { 
     path: '/:pathMatch(.*)*', 
     redirect: '/login' 
@@ -59,23 +58,20 @@ const router = createRouter({
   routes,
 });
 
-// --- Navigation Guard (Guarda de Rota) ---
-// Isso é executado ANTES de carregar qualquer rota
+
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const isAuthenticated = authStore.isAuthenticated;
   const requiresAuth = to.meta.requiresAuth;
 
   if (requiresAuth && !isAuthenticated) {
-    // Se a rota requer login E o usuário NÃO está logado,
-    // redireciona para /login
+    
     next('/login');
   } else if (!requiresAuth && isAuthenticated && (to.name === 'Login' || to.name === 'Register')) {
-    // Se a rota NÃO requer login (ex: /login) E o usuário JÁ está logado,
-    // redireciona para o Dashboard
+    
     next('/');
   } else {
-    // Em todos os outros casos, permite o acesso
+
     next();
   }
 });

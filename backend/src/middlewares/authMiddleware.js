@@ -10,7 +10,6 @@ function authMiddleware(req, res, next) {
     return res.status(401).json({ error: 'Nenhum token fornecido.' });
   }
 
-  // O header vem no formato "Bearer TOKEN_LONGO_AQUI"
   const parts = authHeader.split(' ');
 
   if (parts.length !== 2) {
@@ -28,7 +27,6 @@ function authMiddleware(req, res, next) {
       return res.status(401).json({ error: 'Token inválido ou expirado.' });
     }
 
-    // Se o token é válido, anexamos o ID do usuário na requisição
     req.userId = decoded.id;
     return next();
   });

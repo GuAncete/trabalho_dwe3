@@ -60,8 +60,6 @@ import apiClient from '@/api/axiosConfig';
 const auth = useAuthStore();
 const isLoading = ref(true);
 
-// Inicializa o 'summary' com uma estrutura padrão
-// para evitar erros no template antes da API responder.
 const summary = ref({
   total_faturado: 0,
   total_pago: 0,
@@ -71,7 +69,6 @@ const summary = ref({
   topClientes: []
 });
 
-// Busca os dados da dashboard
 async function fetchSummary() {
   isLoading.value = true;
   try {
@@ -85,7 +82,6 @@ async function fetchSummary() {
   }
 }
 
-// Função helper para formatar dinheiro
 function formatCurrency(value) {
   return value.toLocaleString('pt-BR', {
     style: 'currency',
@@ -93,14 +89,11 @@ function formatCurrency(value) {
   });
 }
 
-// Chama a API quando o componente é montado
 onMounted(fetchSummary);
 </script>
 
 <style>
-/* Estes estilos devem ser ADICIONADOS ao final da sua 
-  tag <style> global em src/App.vue
-*/
+
 
 .loading-container {
   text-align: center;
@@ -115,18 +108,13 @@ onMounted(fetchSummary);
   gap: 20px;
 }
 
-/* O estilo para .summary-container e .summary-box já foi
-  definido no passo anterior (para ClienteDetalhes).
-  Vamos apenas garantir que ele se adapte ao grid.
-*/
 .summary-container {
-  display: grid; /* Sobrescreve o flex de antes */
+  display: grid; 
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   width: 100%;
 }
 
-/* Widgets Genéricos */
 .widget-container {
   background-color: #fff;
   padding: 25px;
@@ -161,7 +149,6 @@ onMounted(fetchSummary);
   text-decoration: underline;
 }
 
-/* Lista de Top Clientes */
 .top-clients-list {
   list-style-type: none;
   padding: 0;

@@ -22,7 +22,6 @@ class AuthController {
 
       const senha_hash = await bcrypt.hash(senha, 10);
 
-      // Knex retorna um array, pegamos o primeiro (e único) item
       const [novoUsuario] = await db('usuarios')
         .insert({
           nome,
@@ -30,7 +29,7 @@ class AuthController {
           senha_hash,
           removido: false,
         })
-        .returning(['id', 'nome', 'email']); // Retorna os dados inseridos
+        .returning(['id', 'nome', 'email']); 
 
       return res.status(201).json(novoUsuario);
     } catch (error) {
@@ -50,14 +49,13 @@ class AuthController {
     try {
       const usuario = await db('usuarios')
         .where({ email })
-        .where({ removido: false }) // Não deixa usuário "removido" logar
+        .where({ removido: false }) 
         .first();
 
       if (!usuario) {
         return res.status(404).json({ error: 'Usuário não encontrado.' });
       }
 
-      // Compara a senha enviada com a hash salva no banco
       const senhaCorreta = await bcrypt.compare(senha, usuario.senha_hash);
 
       if (!senhaCorreta) {
@@ -68,7 +66,7 @@ class AuthController {
       const token = jwt.sign(
         { id: usuario.id, email: usuario.email },
         JWT_SECRET,
-        { expiresIn: '8h' } // Token expira em 8 horas
+        { expiresIn: '8h' } 
       );
 
       return res.json({

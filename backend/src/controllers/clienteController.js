@@ -17,7 +17,7 @@ class ClienteController {
       
       return res.status(201).json(novoCliente);
     } catch (error) {
-      // Código '23505' é violação de constraint única (ex: documento duplicado)
+     
       if (error.code === '23505') {
         return res.status(400).json({ error: 'Este documento (CPF/CNPJ) já está cadastrado.' });
       }
@@ -29,7 +29,7 @@ class ClienteController {
   // 2. READ (Listar Todos)
   async index(req, res) {
     try {
-      // Filtra para não mostrar os removidos
+      
       const clientes = await db('clientes').where({ removido: false }).select('*');
       return res.json(clientes);
     } catch (error) {
@@ -45,7 +45,7 @@ class ClienteController {
     try {
       const cliente = await db('clientes')
         .where({ id: id, removido: false })
-        .first(); // .first() garante que retorne um objeto, não um array
+        .first(); 
 
       if (!cliente) {
         return res.status(404).json({ error: 'Cliente não encontrado.' });
@@ -75,7 +75,7 @@ class ClienteController {
       const [clienteAtualizado] = await db('clientes')
         .where({ id: id })
         .update({
-          nome: nome || cliente.nome, // Mantém o valor antigo se o novo não for enviado
+          nome: nome || cliente.nome, 
           documento: documento || cliente.documento,
         })
         .returning('*');
@@ -103,10 +103,8 @@ class ClienteController {
         return res.status(404).json({ error: 'Cliente não encontrado.' });
       }
 
-      // Soft delete: apenas marcamos como removido
       await db('clientes').where({ id: id }).update({ removido: true });
 
-      // Status 204 = "No Content" (sucesso, mas sem corpo de resposta)
       return res.status(204).send();
     } catch (error) {
       console.error(error);

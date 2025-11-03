@@ -59,7 +59,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import apiClient from '@/api/axiosConfig'; // Nosso cliente Axios protegido
+import apiClient from '@/api/axiosConfig'; 
 
 const router = useRouter();
 const clientes = ref([]);
@@ -71,7 +71,7 @@ const form = ref({
   documento: ''
 });
 
-// --- Funções CRUD ---
+
 
 async function fetchClientes() {
   try {
@@ -92,14 +92,12 @@ async function handleSubmit() {
   isLoading.value = true;
   try {
     if (editMode.value) {
-      // 4. UPDATE
       await apiClient.put(`/clientes/${form.value.id}`, {
         nome: form.value.nome,
         documento: form.value.documento
       });
       alert('Cliente atualizado com sucesso!');
     } else {
-      // 1. CREATE
       await apiClient.post('/clientes', {
         nome: form.value.nome,
         documento: form.value.documento
@@ -107,7 +105,7 @@ async function handleSubmit() {
       alert('Cliente criado com sucesso!');
     }
     resetForm();
-    await fetchClientes(); // Recarrega a lista
+    await fetchClientes(); 
   } catch (error) {
     console.error('Erro ao salvar cliente:', error.response?.data);
     alert('Erro ao salvar: ' + (error.response?.data?.error || 'Tente novamente.'));
@@ -116,13 +114,13 @@ async function handleSubmit() {
   }
 }
 
-// 5. DELETE
+
 async function handleDelete(id) {
   if (confirm('Tem certeza que deseja remover este cliente? (Soft delete)')) {
     try {
       await apiClient.delete(`/clientes/${id}`);
       alert('Cliente removido com sucesso.');
-      await fetchClientes(); // Recarrega a lista
+      await fetchClientes(); 
     } catch (error) {
       console.error('Erro ao deletar cliente:', error);
       alert('Erro ao remover cliente.');
@@ -130,24 +128,20 @@ async function handleDelete(id) {
   }
 }
 
-// --- Funções de UI ---
 
 function handleEdit(cliente) {
   editMode.value = true;
-  form.value = { ...cliente }; // Copia os dados do cliente para o formulário
-  window.scrollTo(0, 0); // Rola para o topo (onde está o form)
+  form.value = { ...cliente }; 
+  window.scrollTo(0, 0); 
 }
 
 function cancelEdit() {
   resetForm();
 }
 
-// 2. READ (Um) / 3. READ (Todos)
 function handleView(id) {
-  // Navega para a página de detalhes (1:N)
   router.push({ name: 'ClienteDetalhes', params: { id: id } });
 }
 
-// Carrega os clientes quando o componente é montado
 onMounted(fetchClientes);
 </script>

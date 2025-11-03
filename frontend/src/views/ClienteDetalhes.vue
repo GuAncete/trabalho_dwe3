@@ -99,7 +99,6 @@
 </template>
 
 <script setup>
-// 1. Importar 'computed'
 import { ref, onMounted, computed } from 'vue'; 
 import { useRoute } from 'vue-router';
 import apiClient from '@/api/axiosConfig';
@@ -117,16 +116,14 @@ const formFatura = ref({
   data_vencimento: ''
 });
 
-// --- 2. NOVOS COMPUTED PROPERTIES (TOTAIS) ---
 
-// Calcula o valor total de todas as faturas listadas
 const totalFaturado = computed(() => {
   return faturas.value.reduce((total, fatura) => {
     return total + parseFloat(fatura.valor);
   }, 0);
 });
 
-// Calcula o valor total apenas das faturas que possuem data_pagamento
+
 const totalPago = computed(() => {
   return faturas.value.reduce((total, fatura) => {
     if (fatura.data_pagamento) {
@@ -136,13 +133,13 @@ const totalPago = computed(() => {
   }, 0);
 });
 
-// Calcula o valor pendente (Total - Pago)
+
 const totalPendente = computed(() => {
   return totalFaturado.value - totalPago.value;
 });
 
 
-// --- Funções de Carregamento ---
+
 
 async function fetchCliente() {
   try {
@@ -163,7 +160,7 @@ async function fetchFaturas() {
   }
 }
 
-// --- Funções CRUD Faturas ---
+
 
 async function handleCreateFatura() {
   isLoading.value = true;
@@ -174,7 +171,7 @@ async function handleCreateFatura() {
     });
     alert('Fatura criada com sucesso!');
     formFatura.value = { descricao: '', valor: 0.0, data_vencimento: '' };
-    await fetchFaturas(); // Recarrega a lista e os totais
+    await fetchFaturas(); 
   } catch (error) {
      console.error('Erro ao criar fatura:', error.response?.data);
     alert('Erro ao criar fatura: ' + (error.response?.data?.error || 'Tente novamente.'));
@@ -188,7 +185,7 @@ async function handleDeleteFatura(faturaId) {
     try {
       await apiClient.delete(`/faturas/${faturaId}`);
       alert('Fatura removida com sucesso.');
-      await fetchFaturas(); // Recarrega a lista e os totais
+      await fetchFaturas(); 
     } catch (error) {
       console.error('Erro ao deletar fatura:', error);
       alert('Erro ao remover fatura.');
@@ -196,14 +193,14 @@ async function handleDeleteFatura(faturaId) {
   }
 }
 
-// --- 3. NOVA FUNÇÃO DE PAGAMENTO ---
+
 async function handlePagarFatura(faturaId) {
   if (confirm('Confirmar o pagamento desta fatura?')) {
     try {
-      // Chama o novo endpoint da API
+      
       await apiClient.patch(`/faturas/${faturaId}/pagar`);
       alert('Fatura paga com sucesso!');
-      await fetchFaturas(); // Recarrega a lista para atualizar status e totais
+      await fetchFaturas(); 
     } catch (error) {
       console.error('Erro ao pagar fatura:', error.response?.data);
       alert('Erro: ' + (error.response?.data?.error || 'Não foi possível pagar a fatura.'));
@@ -212,7 +209,7 @@ async function handlePagarFatura(faturaId) {
 }
 
 
-// --- Funções Auxiliares ---
+
 function formatarData(dataISO) {
   if (!dataISO) return '';
   const data = new Date(dataISO);
@@ -226,27 +223,20 @@ onMounted(() => {
 </script>
 
 <style>
-/* Estes estilos devem ser ADICIONADOS dentro da sua tag <style> 
-  existente no App.vue (ou, se você moveu os estilos, 
-  adicione-os ao ClienteDetalhes.vue)
-  
-  Para simplificar, vou assumir que estão no App.vue:
-*/
 
-/* Resumo Financeiro */
 .summary-container {
   display: flex;
   justify-content: space-between;
   margin: 20px 0;
-  gap: 20px; /* Espaçamento entre os cards */
+  gap: 20px; 
 }
 .summary-box {
-  flex: 1; /* Ocupa espaço igual */
+  flex: 1; 
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  border-left: 5px solid #0275d8; /* Borda padrão (Total) */
+  border-left: 5px solid #0275d8; 
 }
 .summary-box span {
   display: block;
@@ -259,37 +249,37 @@ onMounted(() => {
   font-size: 1.8rem;
   color: #333;
 }
-/* Cores específicas */
+
 .summary-box.pago {
-  border-left-color: #5cb85c; /* Verde */
+  border-left-color: #5cb85c; 
 }
 .summary-box.pago strong {
   color: #5cb85c;
 }
 .summary-box.pendente {
-  border-left-color: #d9534f; /* Vermelho */
+  border-left-color: #d9534f; 
 }
 .summary-box.pendente strong {
   color: #d9534f;
 }
 
-/* Status da Tabela */
+
 .status-pago {
   color: #5cb85c;
   font-weight: 600;
 }
 .status-pendente {
-  color: #f0ad4e; /* Laranja */
+  color: #f0ad4e; 
   font-weight: 600;
 }
 
-/* Novo botão Pagar */
+
 .btn-pay {
   background-color: #5cb85c;
   color: white;
 }
 
-/* Estilo para botões desabilitados */
+
 .action-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;

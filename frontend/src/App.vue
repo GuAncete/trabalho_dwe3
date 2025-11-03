@@ -65,13 +65,11 @@ body {
   box-sizing: border-box;
 }
 
-/* --- 2. NOVO LAYOUT (SIDEBAR + CONTEÚDO) --- */
 
 .app-container {
   display: flex;
 }
 
-/* --- 2a. Estilos do Menu Lateral (Sidebar) --- */
 .sidebar {
   width: 240px;
   height: 100vh; /* Altura total da tela */
