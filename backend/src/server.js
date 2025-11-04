@@ -1,4 +1,4 @@
-// srcc/server.js
+// src/server.js
 
 require('dotenv').config();
 const express = require('express');
