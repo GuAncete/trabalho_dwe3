@@ -30,7 +30,7 @@ class UserController {
     const { nome, email, senha } = req.body; 
 
     try {
-      // 1. Prepara o objeto de atualização
+      // 1. Prepara objeto de atualização
       const dataToUpdate = {};
 
       if (nome) {

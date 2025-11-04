@@ -10,7 +10,7 @@ const dashboardController = require('./controllers/dashboardController');
 
 const routes = new Router();
 
-// --- Rotas Públicas (Autenticação) ---
+// --- Rotas Publicas (Autenticação) ---
 routes.post('/register', authController.register); // Criar usuário
 routes.post('/login', authController.login);       // Obter token JWT
 

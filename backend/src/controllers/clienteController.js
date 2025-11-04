@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 class ClienteController {
   
-  // 1. CREATE (Criar Cliente)
+  // 1. CREATE (Criar Client)
   async create(req, res) {
     const { nome, documento } = req.body;
 

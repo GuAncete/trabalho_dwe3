@@ -4,7 +4,7 @@ class DashboardController {
 
   async getSummary(req, res) {
     try {
-      // 1. Agregações de Faturas (SUMs, COUNTs)
+      // 1. Agregações de Fatura (SUMs, COUNTs)
       const faturaStats = await db("faturas as f") 
         .join("clientes as c", "f.cliente_id", "=", "c.id") 
         .where("f.removido", false) 

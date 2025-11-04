@@ -6,7 +6,7 @@ require('dotenv').config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 class AuthController {
-  // REGISTRAR (Criar usuário)
+  // REGISTRAR (Criar user)
   async register(req, res) {
     const { nome, email, senha } = req.body;
 

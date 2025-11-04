@@ -1,6 +1,7 @@
 const knex = require('knex');
 require('dotenv').config();
 
+//Configuração do banco
 const config = {
   client: 'pg',
   connection: {

@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 class FaturaController {
   
-  // 1. CREATE (Criar Fatura para um Cliente)
+  // 1. CREATE (Criar Fatura para um Client)
   async create(req, res) {
     const { cliente_id, descricao, valor, data_vencimento } = req.body;
 
