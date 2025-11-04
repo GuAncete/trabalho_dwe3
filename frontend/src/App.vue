@@ -33,7 +33,11 @@
 
     </div>
   </div>
-
+  <!-- 
+    Layout Alternativo (Else):
+    Se o usuário NÃO estiver autenticado, mostra este container.
+    Usado para as telas de Login, Registro, etc.
+  -->
   <div v-else class="logged-out-container">
     <router-view />
   </div>
